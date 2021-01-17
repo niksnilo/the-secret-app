@@ -9,8 +9,14 @@ body {
     color: #fff;
 }
 
-.home-centered {
+.home-centered{
   padding-top: 150px;
+  text-align: center;
+  color: #fff;
+}
+
+.page-404-centered{
+  padding-top: 110px;
   text-align: center;
   color: #fff;
 }
@@ -101,6 +107,11 @@ span{
 
 .title, .fa-key{
   color: #5ab9ea;
+}
+
+.svg-404{
+   width: 100%;
+   height: 300px;
 }
 
 @media (min-width: 320px) and (max-width: 424px){
