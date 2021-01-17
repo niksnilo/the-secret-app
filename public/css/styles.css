@@ -104,7 +104,7 @@ span{
 }
 
 @media (min-width: 320px) and (max-width: 424px){
-  .btnLogin, .btnHomeRegister, .btnHoneLogin{
+  .btnLogin, .btnHomeRegister, .btnHomeLogin{
     display: inline-block;
   }
 }
