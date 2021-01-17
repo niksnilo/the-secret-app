@@ -114,8 +114,38 @@ span{
    height: 300px;
 }
 
+@media (min-width: 992px) and (max-width: 1199px) {
+ 
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+
+}
+
+@media (max-width: 575px) {
+
+}
+
+@media (min-width: 425px) {
+  .page-404-text{
+    font-size: 24px;
+  }
+}
+
 @media (min-width: 320px) and (max-width: 424px){
   .btnLogin, .btnHomeRegister, .btnHomeLogin{
     display: inline-block;
+  }
+
+  .page-404-centered{
+    padding-top: 50px;
+  }
+
+  .page-404-text{
+    font-size: 24px;
   }
 }
