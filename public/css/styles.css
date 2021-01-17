@@ -1,0 +1,110 @@
+
+body {
+  background-color: #131419;
+}
+
+.centered {
+    padding-top: 70px;
+    text-align: center;
+    color: #fff;
+}
+
+.home-centered {
+  padding-top: 150px;
+  text-align: center;
+  color: #fff;
+}
+
+.secret-text {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+  background-color: #000;
+}
+
+.btnLogin, .btnHomeRegister, .btnHomeLogin, .btnLogout, .btnSubmitSecret{
+  color: #5ab9ea;
+  width: 100%;
+  padding: 10px 40px;
+  border-radius: 20px;
+  transition: all 0.5s ease;
+  outline: none;
+  background: #131419;
+  box-shadow:  -5px -5px 10px rgba(255, 255, 255, 0.10),
+             5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.btnLogin:hover, .btnHomeLogin:hover, .btnHomeRegister:hover, .btnLogout:hover, .btnSubmitSecret:hover{
+  color: #5ab9ea;
+}
+
+.btnHomeRegister:active, .btnHomeLogin:active, .btnLogin:active, .btnLogout:active, .btnSubmitSecret:active{
+  color: #5ab9ea;
+  width: 100%;
+  padding: 10px 40px;
+  border-radius: 20px;
+  transition: 0.5s;
+  background: #131419;
+  box-shadow:  inset -5px -5px 10px rgba(255, 255, 255, 0.10),
+               inset 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* LOGIN FORM */
+.card{
+  color: #fff;
+  border-radius: 20px;
+  background: #131419;
+  box-shadow:  -5px -5px 10px rgba(255, 255, 255, 0.10),
+                5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-title{
+  color: #fff;
+}
+
+.card-title p{
+  color: #868686;
+}
+
+form{
+  font-size: 18px;
+  text-align: left;
+  color: #868686;
+}
+
+form .form-group .inputEmail,form .form-group .inputPass{
+  width: 100%;
+  padding: 10px 40px;
+  border-radius: 20px;
+  background: #131419;
+  outline: none;
+  border: none;
+  font-size: 18px;
+  color: #5ab9ea;
+  box-shadow: inset -5px -5px 10px rgba(255, 255, 255, 0.10),
+              inset  5px 5px 15px rgba(0, 0, 0, 0.8);
+}
+
+button,button:focus{
+  border: none;
+  outline: none;
+}
+
+.signUp, .forgotPassword, .signUp:hover, .forgotPassword:hover{
+  color:#5ab9ea;
+}
+
+span{
+  font-size: 18px;
+  color: #5ab9ea;
+}
+
+.title{
+  color: #5ab9ea;
+}
+
+@media (min-width: 320px) and (max-width: 424px){
+  .btnLogin, .btnHomeRegister, .btnHoneLogin{
+    display: inline-block;
+  }
+}

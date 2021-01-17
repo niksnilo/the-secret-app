@@ -1,0 +1,49 @@
+<%- include('partials/header') %>
+
+<div class="container centered">
+
+  <div class="row">
+    <div class="col-sm-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+      <h1 class="mb-4 title">The Secret App</h1>
+      <div class="card px-md-5">
+        <div class="card-body">
+          <div class="card-title text-center">
+            <span>Log Into Secret App</span>
+            <p class="mt-2 mb-2">&nbsp; <%= errorMessage %></p>
+          </div>
+
+          <!-- Makes POST request to /login route -->
+          <form action="/login" method="POST">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-controll form-control-lg inputEmail" name="username" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control form-control-lg inputPass" name="password">
+            </div>
+            <button type="submit" class="btn-lg btnLogin mt-3">Login</button>
+            <div class="signup text-center">
+              <p class="mt-4"><a href="#!" class="forgotPassword mr-3 h6">Forgot Password?</a><a href="/register" class="signUp h6"> Sign Up for Secret App</a></p>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <a class="btn btn-block" href="/auth/google" role="button">
+            <i class="fab fa-google"></i>
+            Sign In with Google
+          </a>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>
