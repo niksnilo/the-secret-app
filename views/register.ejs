@@ -8,6 +8,7 @@
         <div class="card-body">
           <div class="card-title text-center">
             <span>Fill out this form</span>
+            <p class="mt-2 mb-2">&nbsp; <%= errorMessage %></p>
           </div>
 
           <!-- Makes POST request to /register route -->
@@ -20,6 +21,10 @@
               <label for="password">Password</label>
               <input type="password" class="form-control form-control-lg inputPass" name="password">
             </div>
+            <!-- <div class="form-group">
+              <label for="retype-password">Re-type Password</label>
+              <input type="password" class="form-control form-control-lg inputRetypePass" name="retypePassword">
+            </div> -->
             <button type="submit" class="btn-lg btnLogin mt-3 mb-4">Sign Up</button>
             <a class="btn-lg btnSignUpWithGoogle button" href="/auth/google" role="button">
               <i class="fab fa-google"></i>

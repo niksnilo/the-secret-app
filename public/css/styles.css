@@ -93,7 +93,7 @@ form{
   color: #868686;
 }
 
-form .form-group .inputEmail,form .form-group .inputPass{
+form .form-group .inputEmail,form .form-group .inputPass, form .form-group .inputRetypePass{
   width: 100%;
   padding: 10px 40px;
   border-radius: 20px;

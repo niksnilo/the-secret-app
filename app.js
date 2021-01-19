@@ -9,12 +9,14 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+const flash = require('connect-flash');
 
 const app = express();
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(flash());
 
 app.use(session({
     secret: "Our little secret.",
@@ -32,6 +34,7 @@ mongoose.set("useCreateIndex", true);
 const userSchema = new mongoose.Schema({
     email: String,
     password: String,
+    retypePassword: String,
     googleId: String,
     dateCreated: {
         type: Date,
@@ -60,8 +63,8 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    // callbackURL: "http://localhost:3000/auth/google/secrets",
-    callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
+    callbackURL: "http://localhost:3000/auth/google/secrets",
+    // callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -89,30 +92,38 @@ app.get("/auth/google/secrets",
 
 app.route("/login")
     .get(function(req, res){
-        res.render("login", {errorMessage: ""});
+        
+        res.render("login", { errorMessage: "" });
     })
     .post(function(req, res){
         const user = new User ({
             username: req.body.username,
             password: req.body.password
         });
-
-        req.login(user, function(err){
-            if(err){
-                console.log(err);
-            } else {
-                passport.authenticate("local")(req, res, function(){
-                    res.redirect("/secrets");
+        User.findOne({email: user.username}, function(err, foundUser){
+            if(foundUser && !err){
+                req.login(user, function(err){
+                    if(err){
+                        res.redirect("/login");
+                    } else {
+                        passport.authenticate("local")(req, res, function(){
+                            res.redirect("/secrets");
+                        });
+                    }
                 });
+            } else {	
+                res.render("login", {errorMessage: "The email or password you’ve entered doesn’t match. Please try again."});	
+                // console.log("Your username and password doesn't match. Please try again.");
             }
         });
     });
 
 app.route("/register")
     .get(function(req, res){
-        res.render("register");
+        res.render("register", { errorMessage: "" });
     })
     .post(function(req, res){
+    
        User.register({username: req.body.username}, req.body.password, function(err, user){
            if(err){
                console.log(err);
