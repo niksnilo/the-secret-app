@@ -66,7 +66,25 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
+      if(err){
+        return cb(err);
+      } 
+        //If No user found, automatic create acc
+        if(!user){
+            User.register({username: req.body.username}, req.body.password, function(err, user){
+                if(err){
+                    console.log(err);
+                    res.redirect("/register");
+                } else {
+                    passport.authenticate("local")(req, res, function(){
+                        res.redirect("/secrets");
+                    });
+                }
+            });
+        }  else {
+            //found user. Return
+            return cb(err, user);
+        }
     });
   }
 ));
@@ -113,16 +131,16 @@ app.route("/register")
         res.render("register", {errorMessage: ""});
     })
     .post(function(req, res){
-       User.register({username: req.body.username}, req.body.password, function(err, user){
-           if(err){
-               console.log(err);
-               res.redirect("/register");
-           } else {
+        User.register({username: req.body.username}, req.body.password, function(err, user){
+            if(err){
+                console.log(err);
+                res.redirect("/register", {errorMessage: err});
+            } else {
                 passport.authenticate("local")(req, res, function(){
                     res.redirect("/secrets");
                 });
-           }
-       });
+            }
+        });
     });
 
 app.route("/secrets")
