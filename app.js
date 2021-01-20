@@ -9,6 +9,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+const flash = require('connect-flash');
 
 const app = express();
 
@@ -21,6 +22,13 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+app.use(flash());
+
+app.use(function(req, res, next) {
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,6 +41,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String,
     googleId: String,
+    secret: String,
     dateCreated: {
         type: Date,
         default: Date.now
@@ -60,8 +69,8 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    // callbackURL: "http://localhost:3000/auth/google/secrets",
-    callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
+    callbackURL: "http://localhost:3000/auth/google/secrets",
+    // callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -107,7 +116,7 @@ app.get("/auth/google/secrets",
 
 app.route("/login")
     .get(function(req, res){
-        res.render("login", {errorMessage: ""});
+        res.render("login");
     })
     .post(function(req, res){
         const user = new User ({
@@ -119,16 +128,24 @@ app.route("/login")
             if(err){
                 res.redirect("/login");
             } else {
-                passport.authenticate("local")(req, res, function(){
+                // passport.authenticate("local")(req, res, function(){
+                //     res.redirect("/secrets");
+                // });
+                passport.authenticate("local", {
+                    successRedirect: "/secrets",
+                    successFlash:  '',
+                    failureRedirect: '/login',
+                    failureFlash: 'User doesnt exist'
+                })(req, res, function () {
                     res.redirect("/secrets");
-                });
+                  });
             }
         });
     });
 
 app.route("/register")
     .get(function(req, res){
-        res.render("register", {errorMessage: ""});
+        res.render("register");
     })
     .post(function(req, res){
         User.register({username: req.body.username}, req.body.password, function(err, user){
@@ -136,9 +153,9 @@ app.route("/register")
                 console.log(err);
                 res.redirect("/register");
             } else {
-                    passport.authenticate("local")(req, res, function(){
-                        res.redirect("/secrets");
-                    });
+                passport.authenticate("local")(req, res, function(){
+                    res.redirect("/secrets");
+                });
             }
         });
     });
@@ -146,10 +163,50 @@ app.route("/register")
 app.route("/secrets")
     .get(function(req, res){
         if(req.isAuthenticated()){
-            res.render("secrets");
+            User.find({"secret": {$ne: null}}, function(err, foundUsers){
+                if(err){
+                    console.log(err);
+                } else {
+                    if(foundUsers) {
+                        res.render("secrets", {usersWithSecrets: foundUsers});
+                    }
+                }
+            });
         } else {
             res.redirect("/login");
         }
+    });
+
+app.route("/submit")
+    .get(function(req, res){
+        if(req.isAuthenticated()){
+            res.render("submit");
+        } else {
+            res.redirect("/login");
+        }
+    })
+    .post(function(req, res){
+        const submittedSecret = req.body.secret;
+
+        User.findById(req.user.id, function(err, foundUser){
+            if(err){
+                //If there's an error finding User
+                console.log(err);
+                res.redirect("/login");
+            } else {
+                if(foundUser){
+                    if(submittedSecret == ""){
+                        req.flash("error", "Please fill out this field.")
+                        res.redirect("submit");
+                    } else {
+                        foundUser.secret = submittedSecret;
+                        foundUser.save(function(){
+                            res.redirect("/secrets");
+                        });
+                    }
+                }
+            }
+        });
     });
 
 app.route("/logout")
@@ -163,6 +220,11 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
+
+//401 Unauthorized
+// app.use(function (req, res, next) {
+//     res.status(401, '/login', req.flash('err', 'User doesnt exist'));
+// });
 
 //404 Page not found
 app.use(function (req, res, next) {

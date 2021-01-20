@@ -9,7 +9,12 @@
         <div class="card-body">
           <div class="card-title text-center">
             <span>Log Into Secret App</span>
-            <p class="mt-2 mb-2">&nbsp; <%= errorMessage %></p>
+            <%if(error.length > 0){%>
+              <p class="mt-2 mb-2">The email or phone number you’ve entered doesn’t match any account.</p>
+            <%}%>
+            <%if(success.length > 0){%>
+              <p class="mt-2 mb-2">&nbsp; <%= success %></p>
+            <%}%>
           </div>
 
           <!-- Makes POST request to /login route -->

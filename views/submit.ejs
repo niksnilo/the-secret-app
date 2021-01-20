@@ -1,20 +1,45 @@
 <%- include('partials/header') %>
 
-<div class="container">
-  <div class="jumbotron centered">
+<!-- <div class="container submit-centered">
     <i class="fas fa-key fa-6x"></i>
     <h1 class="display-3">Secrets</h1>
-    <p class="secret-text">Don't keep your secrets, share them anonymously!</p>
+    <p>Don't keep your secrets, share them anonymously!</p>
 
     <form action="/submit" method="POST">
-
       <div class="form-group">
-        <input type="text" class="form-control text-center" name="secret" placeholder="What's your secret?">
+        <input type="text" class="form-control-lg text-center inputSecret" name="secret" placeholder="What's your secret?" autocomplete="off">
       </div>
-      <button type="submit" class="btn btn-dark">Submit</button>
+      <button type="submit" class="btn-lg btnSubmitSecret">Submit</button>
     </form>
+</div> -->
 
-
+<div class="container submit-centered">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+      <h1 class="mb-4 title">The Secret App</h1>
+      <div class="card px-md-5">
+        <div class="card-body">
+          <div class="card-title text-center">
+            <i class="fas fa-key fa-6x"></i>
+            <p class="mt-2">Don't keep your secrets, share them anonymously!</p>
+          </div>
+          <form action="/submit" method="POST">
+            <div class="form-group">
+              <input type="text" class="form-control-lg text-center inputSecret" name="secret" placeholder="What's your secret?" autocomplete="off">
+              <%if(error.length > 0){%>
+                <label><%= error %></label>
+              <%}%>
+              <%if(success.length > 0){%>
+                <label><%= success %></label>
+              <%}%>
+              
+            </div>
+            <button type="submit" class="btn-lg btnSubmitSecret mt-3 mb-4">Submit</button>
+            <a class="btn-lg btnSubmitSecret mr-2 mb-4 button" href="/secrets" role="button">Back</a>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <%- include('partials/footer') %>

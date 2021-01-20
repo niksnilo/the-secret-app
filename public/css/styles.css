@@ -9,7 +9,7 @@ body {
     color: #fff;
 }
 
-.home-centered{
+.home-centered, .submit-centered{
   padding-top: 150px;
   text-align: center;
   color: #fff;
@@ -93,7 +93,8 @@ form{
   color: #868686;
 }
 
-form .form-group .inputEmail,form .form-group .inputPass, form .form-group .inputRetypePass{
+form .form-group .inputEmail, form .form-group .inputPass,
+form .form-group .inputRetypePass, form .form-group .inputSecret{
   width: 100%;
   padding: 10px 40px;
   border-radius: 20px;
