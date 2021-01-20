@@ -4,13 +4,19 @@ body {
 }
 
 .centered {
-    padding-top: 70px;
+    padding-top: 80px;
     text-align: center;
     color: #fff;
 }
 
-.home-centered, .submit-centered{
+.home-centered{
   padding-top: 150px;
+  text-align: center;
+  color: #fff;
+}
+
+.submit-centered{
+  margin-top: 80px;
   text-align: center;
   color: #fff;
 }
@@ -23,9 +29,12 @@ body {
 
 .secret-text {
   text-align: center;
-  font-size: 2rem;
-  color: #fff;
-  background-color: #000;
+  font-size: 18px;
+  color: #5ab9ea;
+}
+
+.card-secret{
+  height: 120px;
 }
 
 .btnLogin, .btnHomeRegister, .btnHomeLogin, .btnLogout,
@@ -78,7 +87,7 @@ body {
   color: #fff;
 }
 
-.card-title p{
+.card-title p, .copy{
   color: #868686;
 }
 
@@ -112,7 +121,7 @@ button,button:focus{
   outline: none;
 }
 
-span{
+span, secret-text{
   font-size: 18px;
   color: #5ab9ea;
 }

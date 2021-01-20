@@ -10,6 +10,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 const flash = require('connect-flash');
+const date = require(__dirname + "/date.js");
+const year = date.getYear();
 
 const app = express();
 
@@ -69,7 +71,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    // callbackURL: "http://localhost:3000/auth/google/secrets",
+    //callbackURL: "http://localhost:3000/auth/google/secrets",
     callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
@@ -116,7 +118,8 @@ app.get("/auth/google/secrets",
 
 app.route("/login")
     .get(function(req, res){
-        res.render("login");
+        
+        res.render("login", {year:year});
     })
     .post(function(req, res){
         const user = new User ({
@@ -145,7 +148,7 @@ app.route("/login")
 
 app.route("/register")
     .get(function(req, res){
-        res.render("register");
+        res.render("register", {year: year});
     })
     .post(function(req, res){
         User.register({username: req.body.username}, req.body.password, function(err, user){
@@ -180,7 +183,7 @@ app.route("/secrets")
 app.route("/submit")
     .get(function(req, res){
         if(req.isAuthenticated()){
-            res.render("submit");
+            res.render("submit", {year: year});
         } else {
             res.redirect("/login");
         }
