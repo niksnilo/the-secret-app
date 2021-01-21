@@ -8,35 +8,36 @@
         <div class="card-body">
           <div class="card-title text-center">
             <span>Log Into Secret App</span>
-            <%if(error.length > 0){%>
-              <p class="mt-2 mb-2">The email or password you’ve entered doesn’t match any account.</p>
-            <%}%>
-            <%if(success.length > 0){%>
-              <p class="mt-2 mb-2">&nbsp; <%= success %></p>
+            
+            <%if(error === "Password or username is incorrect"){%>
+              <p class="mt-2 mb-2">Email or password is incorrect</p>
+            <%} else {%>
+              <p class="mt-2 mb-2"><%= error %></p>
             <%}%>
           </div>
 
           <!-- Makes POST request to /login route -->
           <form action="/login" method="POST">
             <div class="form-group">
-              <input type="email" class="form-controll form-control-lg inputEmail text-center" placeholder="Enter your email" name="username" autocomplete="off" required>
+              <input type="email" class="form-controll form-control-lg inputEmail text-center" placeholder="Enter your email" name="username" autocomplete="off">
             
-              <input type="password" class="form-control form-control-lg inputPass text-center  mt-4" placeholder="Enter your password" name="password" required>
+              <input type="password" class="form-control form-control-lg inputPass text-center  mt-4" placeholder="Enter your password" name="password">
             </div>
             <button type="submit" class="btn-lg btnLogin mt-2 mb-4">Login</button>
-            <a class="btn-lg btnSignIpWithGoogle button" href="/auth/google" role="button">
+            <!-- <a class="btn-lg btnSignIpWithGoogle button" href="/auth/google" role="button">
               <i class="fab fa-google"></i>
               Continue with Google
-            </a>
+            </a> -->
             <div class="signup text-center">
-              <p class="mt-2"><a href="#!" class="forgotPassword mr-3 h6">Forgot Password?</a><a href="/register" class="signUp h6"> Sign Up for Secret App</a></p>
+              <p class="mt-2"><a href="#!" class="forgotPassword mr-3 h6">Forgot Password?</a>
+              <a href="/register" class="signUp h6"> Sign Up</a></p>
             </div>
           </form>
 
         </div>
       </div>
       <p class="mt-3 copy">
-        &copy; Niks Nilo <%= year %> | MongoDB, Mongoose, Node.js, Express.
+        &copy; <%= year %> | Made with <label class="heart">&#x2764;</label> by Niks Nilo
       </p>
     </div>
 
@@ -53,5 +54,11 @@
 
   </div>
 </div>
+
+
+<div class="circle1"></div>
+<div class="circle2"></div>
+<div class="circle3"></div>
+<div class="circle4"></div>
 
 <%- include('partials/footer') %>

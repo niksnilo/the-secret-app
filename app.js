@@ -29,6 +29,7 @@ app.use(flash());
 app.use(function(req, res, next) {
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
+    res.locals.noAccount = req.flash("noAccount");
     next();
 });
 
@@ -42,7 +43,6 @@ mongoose.set("useCreateIndex", true);
 const userSchema = new mongoose.Schema({
     email: String,
     password: String,
-    googleId: String,
     secret: String,
     dateCreated: {
         type: Date,
@@ -68,57 +68,56 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    //callbackURL: "http://localhost:3000/auth/google/secrets",
-    callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      if(err){
-        return cb(err);
-      }
-        //If No user found, automatic create acc
-        if(!user){
-            User.register({username: req.body.username}, req.body.password, function(err, user){
-                if(err){
-                    console.log(err);
-                    res.redirect("/register");
-                } else {
-                    passport.authenticate("local")(req, res, function(){
-                        res.redirect("/secrets");
-                    });
-                }
-            });
-        }  else {
-            //found user. Return
-            return cb(err, user);
-        }
-    });
-  }
-));
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.CLIENT_ID,
+//     clientSecret: process.env.CLIENT_SECRET,
+//     callbackURL: "http://localhost:3000/auth/google/secrets",
+//     //callbackURL: "https://the-secret-app.herokuapp.com/auth/google/secrets",
+//     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+//   },
+//   function(accessToken, refreshToken, profile, cb) {
+//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
+//       if(err){
+//         return cb(err);
+//       }
+//         //If No user found, automatic create acc
+//         if(!user){
+//             User.register({username: req.body.username}, req.body.password, function(err, user){
+//                 if(err){
+//                     console.log(err);
+//                     res.redirect("/register");
+//                 } else {
+//                     passport.authenticate("local")(req, res, function(){
+//                         res.redirect("/secrets");
+//                     });
+//                 }
+//             });
+//         }  else {
+//             //found user. Return
+//             return cb(err, user);
+//         }
+//     });
+//   }
+// ));
 
 app.route("/")
     .get(function(req, res){
         res.render("home");
     });
 
-app.get("/auth/google",
-    passport.authenticate("google", { scope: ["email", "profile"] })
-);
+// app.get("/auth/google",
+//     passport.authenticate("google", { scope: ["email", "profile"] })
+// );
 
-app.get("/auth/google/secrets", 
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  function(req, res) {
-    // Successful authentication, redirect to secrets.
-    res.redirect("/secrets");
-});
+// app.get("/auth/google/secrets", 
+//   passport.authenticate("google", { failureRedirect: "/login" }),
+//   function(req, res) {
+//     // Successful authentication, redirect to secrets.
+//     res.redirect("/secrets");
+// });
 
 app.route("/login")
     .get(function(req, res){
-        
         res.render("login", {year:year});
     })
     .post(function(req, res){
@@ -127,23 +126,40 @@ app.route("/login")
             password: req.body.password
         });
 
-        req.login(user, function(err){
-            if(err){
-                res.redirect("/login");
-            } else {
-                // passport.authenticate("local")(req, res, function(){
-                //     res.redirect("/secrets");
-                // });
-                passport.authenticate("local", {
-                    successRedirect: "/secrets",
-                    successFlash:  '',
-                    failureRedirect: '/login',
-                    failureFlash: 'User doesnt exist'
-                })(req, res, function () {
-                    res.redirect("/secrets");
-                  });
-            }
-        });
+        if(user.username == "" && user.password == ""){
+            //
+            req.flash("error", "Please complete all fields.")
+            res.redirect("/login");
+        } 
+        else if(user.username == ""){
+            req.flash("error", "Please complete all fields.")
+            res.redirect("/login");
+        }
+        else if (user.password == ""){
+            req.flash("error", "Please complete all fields.")
+            res.redirect("/login");
+        } else {
+            req.login(user, function(err){
+                if(err){
+                    req.flash("error", "Something's wrong, Please try again.")
+                    res.redirect("/login");
+                } else {
+                    // passport.authenticate("local")(req, res, function(){
+                    //     res.redirect("/secrets");
+                    // });
+                    passport.authenticate("local", {
+                        successRedirect: "/secrets",
+                        successFlash:  '',
+                        failureRedirect: '/login',
+                        failureFlash: req.flash("noAccount", "")
+                    })(req, res, function () {
+                        res.redirect("/secrets");
+                      });
+                }
+            });
+        }
+
+        
     });
 
 app.route("/register")
@@ -151,16 +167,58 @@ app.route("/register")
         res.render("register", {year: year});
     })
     .post(function(req, res){
-        User.register({username: req.body.username}, req.body.password, function(err, user){
-            if(err){
-                console.log(err);
-                res.redirect("/register");
-            } else {
-                passport.authenticate("local")(req, res, function(){
-                    res.redirect("/secrets");
-                });
-            }
-        });
+        const regUsername = req.body.username;
+        const reqPassword = req.body.password;
+
+        if(regUsername == "" && reqPassword == ""){
+            //
+            req.flash("error", "Please complete all fields.")
+            res.redirect("/register");
+        } 
+        else if(regUsername == ""){
+            req.flash("error", "Please complete all fields.")
+            res.redirect("/register");
+        }   
+        else if(reqPassword == ""){
+            req.flash("error", "Please complete all fields.")
+            res.redirect("/register");
+        }
+        else{
+
+            User.findOne({"username": req.body.username}, function(err, user){
+                // if(err){
+                //     //Already have an acc
+                //     req.flash("account", "May error")
+                //     res.redirect("/register");
+                // }
+                if(user){
+                    req.flash("error", "Email is already taken.")
+                    res.redirect("/register");
+                } else {
+                    User.register({username: req.body.username}, req.body.password, function(err, user){
+                        if(err){
+                            req.flash("error", "Something's wrong, Please try again.")
+                            res.redirect("/register");
+                        } else {
+                            passport.authenticate("local")(req, res, function(){
+                                // req.flash("success", "Welcome " + user.username +"!")
+                                res.redirect("/secrets");
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        // User.register({username: req.body.username}, req.body.password, function(err, user){
+        //     if(err){
+        //         console.log(err);
+        //         res.redirect("/register");
+        //     } else {
+        //         passport.authenticate("local")(req, res, function(){
+        //             res.redirect("/secrets");
+        //         });
+        //     }
+        // });
     });
 
 app.route("/secrets")
@@ -231,7 +289,7 @@ if (port == null || port == "") {
 
 //404 Page not found
 app.use(function (req, res, next) {
-  res.status(404).render("404");
+  res.status(404).render("404", {year: year});
 });
 
 app.listen(port, function() {

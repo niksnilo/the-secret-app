@@ -1,17 +1,32 @@
 <%- include('partials/header') %>
 
-<div class="container page-404-centered">
+<div class="container page-404-centered py-3 h-100">
     <div class="row">
-        <div class="col-12">
-            <img src="img/404.svg" alt="404" class="svg-404">
-            <h1 class="mt-2 page-404-text">Page Not Found</h1>
-            <p>We're sorry, we couldn't find the page you requested.</p>
-            <div class="mt-4">
-                <a class="btn-lg btnHomeRegister mr-2 mb-4" href="/register" role="button">Register</a>
-                <a class="btn-lg btnHomeLogin" href="/login" role="button">Login</a>
+        <div class="col-sm-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+            <div class="card card-404 px-md-4 py-md-4">
+                <div class="card-body">
+                    <div class="card-title">
+                        <img src="img/404.svg" alt="404" class="svg-404">
+                    </div>
+                
+                    <h1 class="page-404-text">Page Not Found</h1>
+                    <p>We're sorry, we couldn't find the page you requested.</p>
+                    <div class="mt-4">
+                        <a class="btn-lg btnHomeRegister mr-2 mb-4 abtn" href="/register" role="button">Register</a>
+                        <a class="btn-lg btnHomeLogin abtn" href="/login" role="button">Login</a>
+                    </div>
+                </div>
             </div>
+            <p class="mt-3 copy">
+                &copy; <%= year %> | Made with <label class="heart">&#x2764;</label> by Niks Nilo
+            </p>
         </div>
     </div>
 </div>
+
+<div class="circle1"></div>
+<div class="circle2"></div>
+<div class="circle3"></div>
+<div class="circle4"></div>
 
 <%- include('partials/footer') %>
