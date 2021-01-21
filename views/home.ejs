@@ -2,11 +2,22 @@
 
 
 <div class="container home-centered">
-    <i class="fas fa-key fa-6x"></i>
-    <h1 class="display-3">Secrets</h1>
-    <p class="">Don't keep your secrets, share them anonymously!</p>
-    <a class="btn-lg btnHomeRegister mr-2 mb-4" href="/register" role="button">Register</a>
-    <a class="btn-lg btnHomeLogin" href="/login" role="button">Login</a>
+    <div class="row">
+        <div class="col-sm-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+            <div class="card px-md-4 py-md-4">
+                <div class="card-body">
+                    <i class="fas fa-key fa-6x"></i>
+                    <h1 class="display-3">Secrets</h1>
+                    <p class="">Don't keep your secrets, share them anonymously!</p>
+                    <a class="btn-lg btnHomeRegister mr-2 mb-4" href="/register" role="button">Register</a>
+                    <a class="btn-lg btnHomeLogin" href="/login" role="button">Login</a>
+                </div>
+            </div>
+            <%- include('partials/copy') %>
+        </div>
+    </div>
 </div>
+
+<%- include('partials/circles') %>
 
 <%- include('partials/footer') %>

@@ -102,7 +102,7 @@ passport.deserializeUser(function(id, done) {
 
 app.route("/")
     .get(function(req, res){
-        res.render("home");
+        res.render("home", {year:year});
     });
 
 // app.get("/auth/google",
