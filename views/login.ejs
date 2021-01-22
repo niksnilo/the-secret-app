@@ -9,7 +9,7 @@
           <div class="card-title text-center">
             <span>Log Into Secret App</span>
             
-            <%if(error == "Password or username is incorrect"){%>
+            <%if(error === "Password or username is incorrect"){%>
               <p class="mt-2 mb-2">Email or password is incorrect</p>
             <%} else {%>
               <p class="mt-2 mb-2"><%= error %></p>
