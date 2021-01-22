@@ -29,7 +29,6 @@ app.use(flash());
 app.use(function(req, res, next) {
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
-    res.locals.noAccount = req.flash("noAccount");
     next();
 });
 
@@ -151,7 +150,7 @@ app.route("/login")
                         successRedirect: "/secrets",
                         successFlash:  '',
                         failureRedirect: '/login',
-                        failureFlash: req.flash("noAccount", "")
+                        failureFlash: true
                     })(req, res, function () {
                         res.redirect("/secrets");
                       });
